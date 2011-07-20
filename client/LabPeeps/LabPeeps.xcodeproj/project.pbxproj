@@ -19,7 +19,6 @@
 		D1AA92CF13D647E8002C5919 /* LabPeepsAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D1AA92CA13D647E8002C5919 /* LabPeepsAppDelegate.m */; };
 		D1AA92D013D647E8002C5919 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D1AA92CD13D647E8002C5919 /* RootViewController.m */; };
 		D1AA92D613D64816002C5919 /* Skill.m in Sources */ = {isa = PBXBuildFile; fileRef = D1AA92D513D64816002C5919 /* Skill.m */; };
-		D1AA934613D660A3002C5919 /* PeepDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D1AA934513D660A3002C5919 /* PeepDetailViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,8 +42,6 @@
 		D1AA92CD13D647E8002C5919 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 		D1AA92D413D64816002C5919 /* Skill.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Skill.h; sourceTree = "<group>"; };
 		D1AA92D513D64816002C5919 /* Skill.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Skill.m; sourceTree = "<group>"; };
-		D1AA934413D660A3002C5919 /* PeepDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PeepDetailViewController.h; sourceTree = "<group>"; };
-		D1AA934513D660A3002C5919 /* PeepDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PeepDetailViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,8 +145,6 @@
 			children = (
 				D1AA92CC13D647E8002C5919 /* RootViewController.h */,
 				D1AA92CD13D647E8002C5919 /* RootViewController.m */,
-				D1AA934413D660A3002C5919 /* PeepDetailViewController.h */,
-				D1AA934513D660A3002C5919 /* PeepDetailViewController.m */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -222,7 +217,6 @@
 				D1AA92CF13D647E8002C5919 /* LabPeepsAppDelegate.m in Sources */,
 				D1AA92D013D647E8002C5919 /* RootViewController.m in Sources */,
 				D1AA92D613D64816002C5919 /* Skill.m in Sources */,
-				D1AA934613D660A3002C5919 /* PeepDetailViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

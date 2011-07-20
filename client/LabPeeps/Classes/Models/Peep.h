@@ -9,13 +9,17 @@
 #import <CoreData/CoreData.h>
 
 
-@interface Peep :  NSManagedObject  
+@interface Peep :  NSManagedObject
 {
 }
 
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSString * byline;
 @property (nonatomic, retain) NSSet* skills;
+
++ (Peep *) createInContext:(NSManagedObjectContext *)moc
+                      name:(NSString *)name
+                    skills:(NSArray *)skills;
 
 @end
 

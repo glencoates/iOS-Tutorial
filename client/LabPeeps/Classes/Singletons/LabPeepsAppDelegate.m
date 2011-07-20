@@ -9,6 +9,8 @@
 #import "LabPeepsAppDelegate.h"
 #import "RootViewController.h"
 
+#import "Peep.h"
+#import "Skill.h"
 
 @implementation LabPeepsAppDelegate
 
@@ -26,9 +28,41 @@
 }
 
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    // Check to see if there are already any peeps in the database
+    NSManagedObjectContext *moc = [self managedObjectContext];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Peep" inManagedObjectContext:moc];
+    NSFetchRequest *fetch = [[[NSFetchRequest alloc] init] autorelease];
+    [fetch setEntity:entity];
 
-    // Override point for customization after application launch.
+    NSError *err = nil;
+    NSArray *results = [moc executeFetchRequest:fetch error:&err];
+    NSAssert1( err == nil, @"Couldn't fetch entities during bootstrap: %@", [err localizedDescription] );
+
+    // If there aren't any, let's seed the DB with some sample data
+    if ([results count] == 0)
+    {
+        [Peep createInContext:moc
+                         name:@"Bella Acton"
+                       skills:[NSArray arrayWithObjects:
+                               @"Being awesome", @"Making cups of tea", @"Deserting the labs", nil]];
+
+        [Peep createInContext:moc
+                         name:@"Dick Talens"
+                       skills:[NSArray arrayWithObjects:
+                               @"Picking Django over Rails", @"Benchpressing the rest of his team", nil]];
+
+        [Peep createInContext:moc
+                         name:@"Dave Cascino"
+                       skills:[NSArray arrayWithObjects:
+                               @"Getting in the zone", @"Having a bigger screen than me", nil]];
+
+        [moc save:&err];
+        NSAssert1( err == nil, @"Couldn't seed DB with sample data: %@", [err localizedDescription] );
+
+        NSLog( @"Successfully seeded the database with some sample data" );
+    }
 
     // Set the navigation controller as the window's root view controller and display.
     self.window.rootViewController = self.navigationController;

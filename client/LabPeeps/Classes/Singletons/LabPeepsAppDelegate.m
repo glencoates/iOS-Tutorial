@@ -12,6 +12,9 @@
 #import "Peep.h"
 #import "Skill.h"
 
+#import "ASIHTTPRequest.h"
+#import "NSDictionary_JSONExtensions.h"
+
 @implementation LabPeepsAppDelegate
 
 @synthesize window;
@@ -27,6 +30,22 @@ static LabPeepsAppDelegate *s_instance_ = nil;
 + (LabPeepsAppDelegate *) get
 {
     return s_instance_;
+}
+
+
+/**
+ *  Grabs the updated object database from the server.
+ */
+- (void) sync
+{
+    // Fetch the stuff from the server
+    NSURL *url = [NSURL URLWithString:@"http://192.168.1.103:8000/peeps"];
+    ASIHTTPRequest *req = [[[ASIHTTPRequest alloc] initWithURL:url] autorelease];
+    [req startSynchronous];
+
+    NSError *err = nil;
+    NSDictionary *response = [NSDictionary dictionaryWithJSONData:[req responseData] error:&err];
+    NSLog( @"Result from server is %@", response );
 }
 
 
@@ -81,6 +100,8 @@ static LabPeepsAppDelegate *s_instance_ = nil;
     // Set the navigation controller as the window's root view controller and display.
     self.window.rootViewController = self.navigationController;
     [self.window makeKeyAndVisible];
+
+    [self sync];
 
     return YES;
 }

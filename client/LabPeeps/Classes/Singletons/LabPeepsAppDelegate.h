@@ -32,5 +32,7 @@
 - (NSURL *)applicationDocumentsDirectory;
 - (void)saveContext;
 
+- (void) sync;
+
 @end
 

@@ -9,6 +9,8 @@
 #import "LabPeepsAppDelegate.h"
 #import "RootViewController.h"
 
+#import "Peep.h"
+#import "Skill.h"
 
 @implementation LabPeepsAppDelegate
 
@@ -19,20 +21,41 @@
 #pragma mark -
 #pragma mark Application lifecycle
 
-- (void)awakeFromNib {    
-    
+- (void)awakeFromNib {
+
     RootViewController *rootViewController = (RootViewController *)[navigationController topViewController];
     rootViewController.managedObjectContext = self.managedObjectContext;
 }
 
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
-    
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+
     // Override point for customization after application launch.
 
     // Set the navigation controller as the window's root view controller and display.
     self.window.rootViewController = self.navigationController;
     [self.window makeKeyAndVisible];
+
+    NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
+    [fetch setEntity:[NSEntityDescription entityForName:@"Peep"
+                                 inManagedObjectContext:self.managedObjectContext]];
+
+    NSError *err = nil;
+    NSUInteger numExistingPeeps = [self.managedObjectContext countForFetchRequest:fetch error:&err];
+    NSAssert1( err == nil, @"Couldn't count entities: %@", [err localizedDescription] );
+
+    if (numExistingPeeps == 0)
+    {
+        Peep *dave = [NSEntityDescription insertNewObjectForEntityForName:@"Peep"
+                                                   inManagedObjectContext:self.managedObjectContext];
+        dave.name = @"Dave Cascino";
+
+        Peep *dick = [NSEntityDescription insertNewObjectForEntityForName:@"Peep"
+                                                   inManagedObjectContext:self.managedObjectContext];
+        dick.name = @"Dick Talens";
+
+        [self saveContext];
+    }
 
     return YES;
 }
@@ -48,7 +71,7 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     /*
-     Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
+     Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
      If your application supports background execution, called instead of applicationWillTerminate: when the user quits.
      */
     [self saveContext];
@@ -78,21 +101,21 @@
 
 
 - (void)saveContext {
-    
+
     NSError *error = nil;
 	NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
     if (managedObjectContext != nil) {
         if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
             /*
              Replace this implementation with code to handle the error appropriately.
-             
+
              abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. If it is not possible to recover from the error, display an alert panel that instructs the user to quit the application by pressing the Home button.
              */
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
             abort();
-        } 
+        }
     }
-}    
+}
 
 
 #pragma mark -
@@ -103,11 +126,11 @@
  If the context doesn't already exist, it is created and bound to the persistent store coordinator for the application.
  */
 - (NSManagedObjectContext *)managedObjectContext {
-    
+
     if (managedObjectContext_ != nil) {
         return managedObjectContext_;
     }
-    
+
     NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
     if (coordinator != nil) {
         managedObjectContext_ = [[NSManagedObjectContext alloc] init];
@@ -122,13 +145,13 @@
  If the model doesn't already exist, it is created from the application's model.
  */
 - (NSManagedObjectModel *)managedObjectModel {
-    
+
     if (managedObjectModel_ != nil) {
         return managedObjectModel_;
     }
     NSString *modelPath = [[NSBundle mainBundle] pathForResource:@"LabPeeps" ofType:@"momd"];
     NSURL *modelURL = [NSURL fileURLWithPath:modelPath];
-    managedObjectModel_ = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];    
+    managedObjectModel_ = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
     return managedObjectModel_;
 }
 
@@ -138,43 +161,53 @@
  If the coordinator doesn't already exist, it is created and the application's store added to it.
  */
 - (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
-    
+
     if (persistentStoreCoordinator_ != nil) {
         return persistentStoreCoordinator_;
     }
-    
+
     NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"LabPeeps.sqlite"];
-    
+
     NSError *error = nil;
     persistentStoreCoordinator_ = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-    if (![persistentStoreCoordinator_ addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
+
+    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
+                             [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
+                             [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, nil];
+
+    if (![persistentStoreCoordinator_ addPersistentStoreWithType:NSSQLiteStoreType
+                                                   configuration:nil
+                                                             URL:storeURL
+                                                         options:options
+                                                           error:&error])
+    {
         /*
          Replace this implementation with code to handle the error appropriately.
-         
+
          abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. If it is not possible to recover from the error, display an alert panel that instructs the user to quit the application by pressing the Home button.
-         
+
          Typical reasons for an error here include:
          * The persistent store is not accessible;
          * The schema for the persistent store is incompatible with current managed object model.
          Check the error message to determine what the actual problem was.
-         
-         
+
+
          If the persistent store is not accessible, there is typically something wrong with the file path. Often, a file URL is pointing into the application's resources directory instead of a writeable directory.
-         
+
          If you encounter schema incompatibility errors during development, you can reduce their frequency by:
          * Simply deleting the existing store:
          [[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil]
-         
-         * Performing automatic lightweight migration by passing the following dictionary as the options parameter: 
+
+         * Performing automatic lightweight migration by passing the following dictionary as the options parameter:
          [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],NSMigratePersistentStoresAutomaticallyOption, [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, nil];
-         
+
          Lightweight migration will only work for a limited set of schema changes; consult "Core Data Model Versioning and Data Migration Programming Guide" for details.
-         
+
          */
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
-    }    
-    
+    }
+
     return persistentStoreCoordinator_;
 }
 
@@ -201,11 +234,11 @@
 
 
 - (void)dealloc {
-    
+
     [managedObjectContext_ release];
     [managedObjectModel_ release];
     [persistentStoreCoordinator_ release];
-    
+
     [navigationController release];
     [window release];
     [super dealloc];

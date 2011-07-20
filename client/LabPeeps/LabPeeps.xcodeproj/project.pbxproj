@@ -17,6 +17,8 @@
 		28AD73600D9D9599002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD735F0D9D9599002E5188 /* MainWindow.xib */; };
 		28C286E10D94DF7D0034E888 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* RootViewController.m */; };
 		28D3F202112F7DC200FD0661 /* LabPeeps.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 28D3F201112F7DC200FD0661 /* LabPeeps.xcdatamodeld */; };
+		D1E1E9FE13D74D8100D553FF /* Peep.m in Sources */ = {isa = PBXBuildFile; fileRef = D1E1E9FB13D74D8100D553FF /* Peep.m */; };
+		D1E1E9FF13D74D8100D553FF /* Skill.m in Sources */ = {isa = PBXBuildFile; fileRef = D1E1E9FD13D74D8100D553FF /* Skill.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +37,11 @@
 		28C286E00D94DF7D0034E888 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* LabPeeps-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "LabPeeps-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
+		D1E1E9EF13D74BE100D553FF /* LabPeeps 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "LabPeeps 2.xcdatamodel"; sourceTree = "<group>"; };
+		D1E1E9FA13D74D8100D553FF /* Peep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Peep.h; sourceTree = "<group>"; };
+		D1E1E9FB13D74D8100D553FF /* Peep.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Peep.m; sourceTree = "<group>"; };
+		D1E1E9FC13D74D8100D553FF /* Skill.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Skill.h; sourceTree = "<group>"; };
+		D1E1E9FD13D74D8100D553FF /* Skill.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Skill.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +62,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				D1E1E9F913D74D8100D553FF /* Models */,
 				28C286DF0D94DF7D0034E888 /* RootViewController.h */,
 				28C286E00D94DF7D0034E888 /* RootViewController.m */,
 				1D3623240D0F684500981E51 /* LabPeepsAppDelegate.h */,
@@ -112,6 +120,17 @@
 				28860BE40F44EE6400985440 /* CoreData.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D1E1E9F913D74D8100D553FF /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				D1E1E9FA13D74D8100D553FF /* Peep.h */,
+				D1E1E9FB13D74D8100D553FF /* Peep.m */,
+				D1E1E9FC13D74D8100D553FF /* Skill.h */,
+				D1E1E9FD13D74D8100D553FF /* Skill.m */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -180,6 +199,8 @@
 				1D3623260D0F684500981E51 /* LabPeepsAppDelegate.m in Sources */,
 				28C286E10D94DF7D0034E888 /* RootViewController.m in Sources */,
 				28D3F202112F7DC200FD0661 /* LabPeeps.xcdatamodeld in Sources */,
+				D1E1E9FE13D74D8100D553FF /* Peep.m in Sources */,
+				D1E1E9FF13D74D8100D553FF /* Skill.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -268,8 +289,9 @@
 			isa = XCVersionGroup;
 			children = (
 				28860B760F44E54D00985440 /* LabPeeps.xcdatamodel */,
+				D1E1E9EF13D74BE100D553FF /* LabPeeps 2.xcdatamodel */,
 			);
-			currentVersion = 28860B760F44E54D00985440 /* LabPeeps.xcdatamodel */;
+			currentVersion = D1E1E9EF13D74BE100D553FF /* LabPeeps 2.xcdatamodel */;
 			path = LabPeeps.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

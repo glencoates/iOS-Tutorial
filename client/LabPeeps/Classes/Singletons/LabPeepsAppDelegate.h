@@ -10,7 +10,7 @@
 #import <CoreData/CoreData.h>
 
 @interface LabPeepsAppDelegate : NSObject <UIApplicationDelegate> {
-    
+
     UIWindow *window;
     UINavigationController *navigationController;
 
@@ -26,6 +26,8 @@
 @property (nonatomic, retain, readonly) NSManagedObjectContext *managedObjectContext;
 @property (nonatomic, retain, readonly) NSManagedObjectModel *managedObjectModel;
 @property (nonatomic, retain, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
+
++ (LabPeepsAppDelegate *) get;
 
 - (NSURL *)applicationDocumentsDirectory;
 - (void)saveContext;

@@ -18,18 +18,33 @@
 @synthesize navigationController;
 
 
+static LabPeepsAppDelegate *s_instance_ = nil;
+
+
+/**
+ *  Static accessor to pull a reference to the singleton.
+ */
++ (LabPeepsAppDelegate *) get
+{
+    return s_instance_;
+}
+
+
 #pragma mark -
 #pragma mark Application lifecycle
 
 - (void)awakeFromNib {
 
     RootViewController *rootViewController = (RootViewController *)[navigationController topViewController];
-    rootViewController.managedObjectContext = self.managedObjectContext;
+    [rootViewController initWithMOC:self.managedObjectContext];
 }
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    // Install static pointer
+    s_instance_ = self;
+
     // Check to see if there are already any peeps in the database
     NSManagedObjectContext *moc = [self managedObjectContext];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Peep" inManagedObjectContext:moc];
@@ -58,8 +73,7 @@
                        skills:[NSArray arrayWithObjects:
                                @"Getting in the zone", @"Having a bigger screen than me", nil]];
 
-        [moc save:&err];
-        NSAssert1( err == nil, @"Couldn't seed DB with sample data: %@", [err localizedDescription] );
+        [self saveContext];
 
         NSLog( @"Successfully seeded the database with some sample data" );
     }

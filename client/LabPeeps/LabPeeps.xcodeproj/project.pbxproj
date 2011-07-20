@@ -19,6 +19,7 @@
 		D1AA92CF13D647E8002C5919 /* LabPeepsAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D1AA92CA13D647E8002C5919 /* LabPeepsAppDelegate.m */; };
 		D1AA92D013D647E8002C5919 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D1AA92CD13D647E8002C5919 /* RootViewController.m */; };
 		D1AA92D613D64816002C5919 /* Skill.m in Sources */ = {isa = PBXBuildFile; fileRef = D1AA92D513D64816002C5919 /* Skill.m */; };
+		D1E1E87413D706AD00D553FF /* FRCListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D1E1E87313D706AD00D553FF /* FRCListViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,8 @@
 		D1AA92CD13D647E8002C5919 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 		D1AA92D413D64816002C5919 /* Skill.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Skill.h; sourceTree = "<group>"; };
 		D1AA92D513D64816002C5919 /* Skill.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Skill.m; sourceTree = "<group>"; };
+		D1E1E87213D706AD00D553FF /* FRCListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRCListViewController.h; sourceTree = "<group>"; };
+		D1E1E87313D706AD00D553FF /* FRCListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRCListViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,6 +146,8 @@
 		D1AA92CB13D647E8002C5919 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				D1E1E87213D706AD00D553FF /* FRCListViewController.h */,
+				D1E1E87313D706AD00D553FF /* FRCListViewController.m */,
 				D1AA92CC13D647E8002C5919 /* RootViewController.h */,
 				D1AA92CD13D647E8002C5919 /* RootViewController.m */,
 			);
@@ -217,6 +222,7 @@
 				D1AA92CF13D647E8002C5919 /* LabPeepsAppDelegate.m in Sources */,
 				D1AA92D013D647E8002C5919 /* RootViewController.m in Sources */,
 				D1AA92D613D64816002C5919 /* Skill.m in Sources */,
+				D1E1E87413D706AD00D553FF /* FRCListViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -271,13 +271,14 @@
     [fetchRequest setEntity:entity];
     [fetchRequest setFetchBatchSize:20];
     [fetchRequest setSortDescriptors:[self fetchSortDescriptors]];
+    [fetchRequest setPredicate:[self fetchPredicate]];
 
     // Edit the section name key path and cache name if appropriate.
     // nil for section name key path means "no sections".
-    fetchedResultsController_ = [[[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                                                     managedObjectContext:self.managedObjectContext
-                                                                       sectionNameKeyPath:nil
-                                                                                cacheName:nil] autorelease];
+    fetchedResultsController_ = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+                                                                    managedObjectContext:self.managedObjectContext
+                                                                      sectionNameKeyPath:nil
+                                                                               cacheName:nil];
     fetchedResultsController_.delegate = self;
 
     // Do the fetch to bring in the initial set of results

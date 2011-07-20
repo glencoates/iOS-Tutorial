@@ -10,6 +10,8 @@
 #import "Peep.h"
 #import "Skill.h"
 
+#import "SkillListViewController.h"
+
 @implementation RootViewController
 
 #pragma mark -
@@ -180,16 +182,17 @@
 #pragma mark -
 #pragma mark Table view delegate
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Navigation logic may go here -- for example, create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     NSManagedObject *selectedObject = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     [detailViewController release];
-     */
+
+/**
+ *  Show the skill list for the Peep we tapped.
+ */
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    Peep *peep = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    SkillListViewController *skillListVC = [[SkillListViewController alloc] initWithPeep:peep];
+
+    [self.navigationController pushViewController:skillListVC animated:YES];
+    [skillListVC release];
 }
 
 

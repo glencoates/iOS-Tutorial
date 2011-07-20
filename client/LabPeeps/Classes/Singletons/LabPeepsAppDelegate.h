@@ -30,7 +30,10 @@
 + (LabPeepsAppDelegate *) get;
 
 - (NSURL *)applicationDocumentsDirectory;
-- (void)saveContext;
+
+- (id) fetchEntityOfType:(NSString *)type withPredicate:(NSPredicate *)pred;
+- (NSArray *) fetchEntitiesOfType:(NSString *)type withPredicate:(NSPredicate *)pred;
+- (void) saveContext;
 
 - (void) sync;
 

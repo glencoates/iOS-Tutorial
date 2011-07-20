@@ -13,7 +13,7 @@
 #import "Skill.h"
 
 #import "ASIHTTPRequest.h"
-#import "NSDictionary_JSONExtensions.h"
+#import "CJSONDeserializer.h"
 
 @implementation LabPeepsAppDelegate
 
@@ -41,11 +41,83 @@ static LabPeepsAppDelegate *s_instance_ = nil;
     // Fetch the stuff from the server
     NSURL *url = [NSURL URLWithString:@"http://192.168.1.103:8000/peeps"];
     ASIHTTPRequest *req = [[[ASIHTTPRequest alloc] initWithURL:url] autorelease];
+    [req setTimeOutSeconds:5.0];
     [req startSynchronous];
 
+    NSData *responseData = [req responseData];
+
+    if (responseData == nil)
+    {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Wah!"
+                                                        message:@"Couldn't connect to server"
+                                                       delegate:self
+                                              cancelButtonTitle:@"I'll survive"
+                                              otherButtonTitles:nil];
+
+        [alert show];
+        [alert release];
+    }
+
+    // Unpack the response JSON into a native dictionary
     NSError *err = nil;
-    NSDictionary *response = [NSDictionary dictionaryWithJSONData:[req responseData] error:&err];
-    NSLog( @"Result from server is %@", response );
+    NSArray *response = [[CJSONDeserializer deserializer] deserializeAsArray:responseData error:&err];
+    NSAssert1( err == nil, @"Couldn't deserialize response: %@", [err localizedDescription] );
+
+    // Form a set of all the object IDs that exist now
+    NSMutableSet *originalIDs = [NSMutableSet set];
+    [originalIDs addObjectsFromArray:[[self fetchEntitiesOfType:@"Peep" withPredicate:nil] valueForKey:@"objectID"]];
+    [originalIDs addObjectsFromArray:[[self fetchEntitiesOfType:@"Skill" withPredicate:nil] valueForKey:@"objectID"]];
+
+    // Form a set of all the ones the server sends
+    NSMutableSet *touchedEntities = [NSMutableSet set];
+
+    // Iterate through the response and create / update entities
+    for (NSDictionary *peepDict in response)
+    {
+        // Look up the existing peep, or create it if it doesn't exist
+        NSString *name = [peepDict valueForKey:@"name"];
+        NSPredicate *pred = [NSPredicate predicateWithFormat:@"name = %@", name];
+        Peep *peep = [self fetchEntityOfType:@"Peep" withPredicate:pred];
+
+        if (peep == nil)
+        {
+            peep = [NSEntityDescription insertNewObjectForEntityForName:@"Peep"
+                                                 inManagedObjectContext:self.managedObjectContext];
+            peep.name = name;
+        }
+
+        [touchedEntities addObject:peep];
+
+        // Iterate through skills and create / update as necessary
+        for (NSString *skillInfo in [peepDict valueForKey:@"skills"])
+        {
+            pred = [NSPredicate predicateWithFormat:@"peep = %@ && info = %@", peep, skillInfo];
+            Skill *skill = [self fetchEntityOfType:@"Skill" withPredicate:pred];
+
+            if (skill == nil)
+            {
+                skill = [NSEntityDescription insertNewObjectForEntityForName:@"Skill"
+                                                      inManagedObjectContext:self.managedObjectContext];
+                skill.info = skillInfo;
+                skill.peep = peep;
+            }
+
+            [touchedEntities addObject:skill];
+        }
+    }
+
+    // This causes all the new object IDs to be permanent
+    [self saveContext];
+
+    // Now we can calculate the diff set between the new and old
+    NSMutableSet *touchedIDs = [touchedEntities valueForKey:@"objectID"];
+    [originalIDs minusSet:touchedIDs];
+
+    for (NSManagedObjectID *orphanID in originalIDs)
+    {
+        NSManagedObject *orphan = [self.managedObjectContext objectWithID:orphanID];
+        [self.managedObjectContext deleteObject:orphan];
+    }
 }
 
 
@@ -143,6 +215,38 @@ static LabPeepsAppDelegate *s_instance_ = nil;
  */
 - (void)applicationWillTerminate:(UIApplication *)application {
     [self saveContext];
+}
+
+
+/**
+ *  Fetches a single entity of a given type matching the predicate.  Error if more than one result.
+ */
+- (id) fetchEntityOfType:(NSString *)type withPredicate:(NSPredicate *)pred
+{
+    NSArray *results = [self fetchEntitiesOfType:type withPredicate:pred];
+    NSAssert2( [results count] <= 1, @"Too many results (%d) for %@ fetch", [results count], type );
+
+    return [results count] ? [results lastObject] : nil;
+}
+
+
+/**
+ *  Fetches all entities of a type matching the request.
+ */
+- (NSArray *) fetchEntitiesOfType:(NSString *)type withPredicate:(NSPredicate *)pred
+{
+    NSEntityDescription *entity = [NSEntityDescription entityForName:type
+                                              inManagedObjectContext:self.managedObjectContext];
+
+    NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
+    [fetch setEntity:entity];
+    [fetch setPredicate:pred];
+
+    NSError *err = nil;
+    NSArray *results = [self.managedObjectContext executeFetchRequest:fetch error:&err];
+    NSAssert2( err == nil, @"Couldn't fetch entities of type %@: %@", type, [err localizedDescription] );
+
+    return results;
 }
 
 
